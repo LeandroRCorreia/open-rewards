@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # -----------------------------------------------------------------
+  # BANCO DE DADOS PRINCIPAL (PostgreSQL)
+  # -----------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: openrewards-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: openrewards_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - openrewards-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d openrewards_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # -----------------------------------------------------------------
+  # INTERFACE VISUAL DO BANCO (PgAdmin)
+  # -----------------------------------------------------------------
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: openrewards-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@openrewards.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - openrewards-network
+  redis:
+    image: redis:alpine
+    container_name: openrewards-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - openrewards-network
+
+volumes:
+  postgres_data:
+
+networks:
+  openrewards-network:
+    driver: bridge
