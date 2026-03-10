@@ -25,10 +25,8 @@ public class CreateUserUseCase implements UseCase<User, User> {
         if(userGateway.existsByEmail(input.getEmail())) {
             throw new BusinessException("USER_EMAIL_ALREADY_EXISTS", "Email already exists", HttpStatus.CONFLICT);
         }
-
         User savedUser = userGateway.create(input);
         eventPublisherGateway.publish(buildUserCreatedEvent(savedUser));
-
         return savedUser;
     }
 

@@ -18,4 +18,11 @@ public class Wallet {
     private BigDecimal balance;
     private Long userId;
     private LocalDateTime updatedAt;
+
+    public Wallet deposit(BigDecimal amount){
+        return this.toBuilder()
+                .balance(this.getBalance().add(amount))
+                .build();
+    }
+
 }

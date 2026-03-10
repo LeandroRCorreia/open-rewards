@@ -2,7 +2,10 @@ package com.rewards.openrewards.modules.wallet.business.gateway;
 
 import com.rewards.openrewards.modules.wallet.business.domain.Wallet;
 
-public interface WalletGateway {
+import java.util.Optional;
 
+public interface WalletGateway {
+    Optional<Wallet> findWallet(Long id);
     Wallet create(Wallet wallet);
+    Wallet update(Wallet wallet);
 }
