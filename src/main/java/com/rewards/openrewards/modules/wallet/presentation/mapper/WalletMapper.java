@@ -23,6 +23,7 @@ public class WalletMapper {
                 .walletId(depositRequest.walletId())
                 .description(depositRequest.description())
                 .amount(depositRequest.amount())
+                .idempotencyKey(depositRequest.idempotencyKey())
                 .build();
     }
 
@@ -31,6 +32,7 @@ public class WalletMapper {
                 .walletId(withdrawRequest.walletId())
                 .amount(withdrawRequest.amount())
                 .description(withdrawRequest.description())
+                .idempotencyKey(withdrawRequest.idempotencyKey())
                 .build();
     }
 

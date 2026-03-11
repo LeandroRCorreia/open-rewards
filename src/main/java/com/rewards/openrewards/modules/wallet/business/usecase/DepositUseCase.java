@@ -27,7 +27,7 @@ public class DepositUseCase implements UseCase<DepositInput, Wallet> {
         }
         Wallet wallet = findWalletOrFail(input);
 
-        Transaction transaction = Transaction.createDeposit(wallet.getId(), input.amount(), input.description());
+        Transaction transaction = Transaction.createDeposit(wallet.getId(), input.amount(), input.description(), input.idempotencyKey());
         Wallet walletWithDeposit = wallet.deposit(input.amount());
         transactionGateway.save(transaction);
 

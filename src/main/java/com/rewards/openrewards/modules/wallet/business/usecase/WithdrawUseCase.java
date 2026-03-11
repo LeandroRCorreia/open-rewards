@@ -40,7 +40,7 @@ public class WithdrawUseCase implements UseCase<WithdrawInput, Wallet> {
         }
         Wallet withdrawedWallet = wallet.withdraw(input.amount());
 
-        Transaction transaction = Transaction.createWithdraw(wallet.getId(), input.amount(), input.description());
+        Transaction transaction = Transaction.createWithdraw(wallet.getId(), input.amount(), input.description(), input.idempotencyKey());
 
         transactionGateway.save(transaction);
 

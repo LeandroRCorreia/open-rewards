@@ -19,23 +19,26 @@ public class Transaction {
     private BigDecimal amount;
     private TransactionType transactionType;
     private String description;
+    private String idempotencyKey;
     private LocalDateTime created_at;
 
 
-    public static Transaction createDeposit(Long walletId, BigDecimal amount, String description) {
+    public static Transaction createDeposit(Long walletId, BigDecimal amount, String description, String idempotencyKey) {
         return Transaction.builder()
                 .idWallet(walletId)
                 .amount(amount)
                 .transactionType(TransactionType.DEPOSIT)
+                .idempotencyKey(idempotencyKey)
                 .description(description)
                 .build();
     }
 
-    public static Transaction createWithdraw(Long walletId, BigDecimal amount, String description){
+    public static Transaction createWithdraw(Long walletId, BigDecimal amount, String description, String idempotencyKey){
         return Transaction.builder()
                 .idWallet(walletId)
                 .amount(amount)
                 .transactionType(TransactionType.CASH_OUT)
+                .idempotencyKey(idempotencyKey)
                 .description(description)
                 .build();
     }

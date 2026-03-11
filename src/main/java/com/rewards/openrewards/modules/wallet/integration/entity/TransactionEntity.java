@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "transactions")
@@ -35,6 +36,9 @@ public class TransactionEntity {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "idempotency_key", nullable = false, unique = true)
+    private UUID idempotencyKey;
 
     @CreationTimestamp
     @Column(name = "created_at")

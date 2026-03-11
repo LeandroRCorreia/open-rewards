@@ -1,5 +1,6 @@
 package com.rewards.openrewards.shared;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -50,6 +51,27 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiDefaultResponse<Void>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        if (ex.getMessage() != null && ex.getMessage().contains("idempotency_key")) {
+            ApiDefaultResponse<Void> body = ApiDefaultResponse.businessError(
+                    HttpStatus.CONFLICT.value(),
+                    "TRANSACTION_ALREADY_PROCESSED",
+                    "Esta transação já foi processada anteriormente."
+            );
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+        }
+
+        ApiDefaultResponse<Void> body = ApiDefaultResponse.businessError(
+                HttpStatus.BAD_REQUEST.value(),
+                "DATABASE_ERROR",
+                "Erro de integridade nos dados."
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
 }

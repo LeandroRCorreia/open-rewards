@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 public record WithdrawRequest(
         Long walletId,
         BigDecimal amount,
-        String description
+        String description,
+        String idempotencyKey
 ) {
 }
 

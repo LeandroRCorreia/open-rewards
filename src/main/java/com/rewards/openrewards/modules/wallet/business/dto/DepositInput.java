@@ -8,7 +8,8 @@ import java.math.BigDecimal;
 public record DepositInput(
         Long walletId,
         BigDecimal amount,
-        String description
+        String description,
+        String idempotencyKey
 ) {
 
     public Boolean isDepositZero(){

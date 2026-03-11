@@ -23,7 +23,7 @@ public class TransactionGatewayImpl implements TransactionGateway {
                 .map(transactionEntityMapper::toEntity)
                 .map(transactionRepository::save)
                 .map(transactionEntityMapper::toDomain)
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("Error to create transaction"));
     }
 
 }

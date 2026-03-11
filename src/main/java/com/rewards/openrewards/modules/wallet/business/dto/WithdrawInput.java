@@ -8,7 +8,8 @@ import java.math.BigDecimal;
 public record WithdrawInput(
         Long walletId,
         BigDecimal amount,
-        String description
+        String description,
+        String idempotencyKey
 ) {
     public boolean isInvalidAmount() {
         return amount == null || amount.compareTo(BigDecimal.ZERO) <= 0;

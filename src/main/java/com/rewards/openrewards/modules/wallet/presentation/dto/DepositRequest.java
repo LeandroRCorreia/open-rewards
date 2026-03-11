@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 public record DepositRequest(
         Long walletId,
         BigDecimal amount,
-        String description
+        String description,
+        String idempotencyKey
 ) {
 }

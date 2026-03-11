@@ -1,0 +1,1 @@
+alter table transactions add column idempotency_key UUID UNIQUE;
