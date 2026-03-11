@@ -7,7 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum TransactionType {
     CASH_IN(1, "CASH_IN"),
-    DEPOSIT(2, "DEPOSIT");
+    DEPOSIT(2, "DEPOSIT"),
+    CASH_OUT(3, "CASH_OUT");
 
     private final int code;
     private final String description;

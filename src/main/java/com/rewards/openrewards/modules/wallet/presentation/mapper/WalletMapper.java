@@ -2,8 +2,10 @@ package com.rewards.openrewards.modules.wallet.presentation.mapper;
 
 import com.rewards.openrewards.modules.wallet.business.domain.Wallet;
 import com.rewards.openrewards.modules.wallet.business.dto.DepositInput;
+import com.rewards.openrewards.modules.wallet.business.dto.WithdrawInput;
 import com.rewards.openrewards.modules.wallet.presentation.dto.DepositRequest;
 import com.rewards.openrewards.modules.wallet.presentation.dto.UserCreatedEvent;
+import com.rewards.openrewards.modules.wallet.presentation.dto.WithdrawRequest;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,5 +25,14 @@ public class WalletMapper {
                 .amount(depositRequest.amount())
                 .build();
     }
+
+    public WithdrawInput withdrawRequestToWithdrawInput(WithdrawRequest withdrawRequest){
+        return WithdrawInput.builder()
+                .walletId(withdrawRequest.walletId())
+                .amount(withdrawRequest.amount())
+                .description(withdrawRequest.description())
+                .build();
+    }
+
 
 }

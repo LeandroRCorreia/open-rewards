@@ -31,4 +31,13 @@ public class Transaction {
                 .build();
     }
 
+    public static Transaction createWithdraw(Long walletId, BigDecimal amount, String description){
+        return Transaction.builder()
+                .idWallet(walletId)
+                .amount(amount)
+                .transactionType(TransactionType.CASH_OUT)
+                .description(description)
+                .build();
+    }
+
 }

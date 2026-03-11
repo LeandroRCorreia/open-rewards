@@ -25,4 +25,18 @@ public class Wallet {
                 .build();
     }
 
+    public Boolean isSufficientBalance(BigDecimal amount){
+        return this.balance.compareTo(amount) >= 0.0;
+    }
+
+    public Boolean isNotSufficientBalance(BigDecimal amount){
+        return !isSufficientBalance(amount);
+    }
+
+    public Wallet withdraw(BigDecimal amount){
+        return this.toBuilder()
+                .balance(this.getBalance().subtract(amount))
+                .build();
+    }
+
 }
