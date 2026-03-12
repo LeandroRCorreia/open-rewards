@@ -25,7 +25,7 @@ public class DepositUseCase implements UseCase<DepositInput, Wallet> {
         if (input.isDepositZero()) {
             throw new BusinessException("Deposit amount must be greater than zero", "INVALID_DEPOSIT_AMOUNT", HttpStatus.BAD_REQUEST);
         }
-        Wallet wallet = findWalletOrFail(input);
+        Wallet wallet = findWalletWithLockOrFail(input);
 
         Transaction transaction = Transaction.createDeposit(wallet.getId(), input.amount(), input.description(), input.idempotencyKey());
         Wallet walletWithDeposit = wallet.deposit(input.amount());
@@ -34,8 +34,8 @@ public class DepositUseCase implements UseCase<DepositInput, Wallet> {
         return walletGateway.update(walletWithDeposit);
     }
 
-    private Wallet findWalletOrFail(DepositInput input){
-        return walletGateway.findWallet(input.walletId())
+    private Wallet findWalletWithLockOrFail(DepositInput input){
+        return walletGateway.findWalletWithLock(input.walletId())
                 .orElseThrow(() -> new BusinessException("Wallet not found", "WALLET_NOT_FOUND", HttpStatus.NOT_FOUND));
     }
 

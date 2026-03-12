@@ -20,8 +20,8 @@ public class WalletGatewayImpl implements WalletGateway {
 
     private final WalletEntityMapper walletEntityMapper;
 
-    public Optional<Wallet> findWallet(Long id){
-        return walletRepository.findById(id)
+    public Optional<Wallet> findWalletWithLock(Long id){
+        return walletRepository.findByIdWithLock(id)
                 .map(walletEntityMapper::toDomain);
     }
 

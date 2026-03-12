@@ -30,7 +30,7 @@ public class WithdrawUseCase implements UseCase<WithdrawInput, Wallet> {
             );
         }
 
-        Wallet wallet = findWalletOrFail(input);
+        Wallet wallet = findWalletWithLockOrFail(input);
         if(wallet.isNotSufficientBalance(input.amount())){
             throw new BusinessException(
                     "Insufficient balance",
@@ -47,8 +47,8 @@ public class WithdrawUseCase implements UseCase<WithdrawInput, Wallet> {
         return walletGateway.update(withdrawedWallet);
     }
 
-    private Wallet findWalletOrFail(WithdrawInput input) {
-        return walletGateway.findWallet(input.walletId())
+    private Wallet findWalletWithLockOrFail(WithdrawInput input) {
+        return walletGateway.findWalletWithLock(input.walletId())
                 .orElseThrow(() -> new BusinessException("Wallet not found", "WALLET_NOT_FOUND", HttpStatus.NOT_FOUND));
     }
 
