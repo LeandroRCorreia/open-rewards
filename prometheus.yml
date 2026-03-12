@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 10s # A cada 10 segundos ele vai bater na sua API
+
+scrape_configs:
+  - job_name: 'openrewards-api'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      # host.docker.internal faz o container achar o seu Spring Boot rodando no IntelliJ (localhost)
+      - targets: ['host.docker.internal:8080']

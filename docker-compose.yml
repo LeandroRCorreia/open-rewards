@@ -70,6 +70,34 @@ services:
       timeout: 5s
       retries: 5
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: openrewards-prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      # O Prometheus precisa desse arquivo para saber quem monitorar!
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - openrewards-network
+    # -----------------------------------------------------------------
+    # GRAFANA
+    # -----------------------------------------------------------------
+  grafana:
+    image: grafana/grafana:latest
+    container_name: openrewards-grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    networks:
+      - openrewards-network
+
 volumes:
   postgres_data:
 
