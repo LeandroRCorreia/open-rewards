@@ -8,6 +8,7 @@ import com.rewards.openrewards.modules.wallet.business.gateway.WalletGateway;
 import com.rewards.openrewards.shared.BusinessException;
 import com.rewards.openrewards.shared.UseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ public class WithdrawUseCase implements UseCase<WithdrawInput, Wallet> {
 
     @Override
     @Transactional
+    @CacheEvict(value = "wallet-balance", key = "#input.walletId()")
     public Wallet execute(WithdrawInput input) {
         if(input.isInvalidAmount()){
             throw new BusinessException(

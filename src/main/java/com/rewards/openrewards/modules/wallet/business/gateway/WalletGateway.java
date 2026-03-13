@@ -5,7 +5,8 @@ import com.rewards.openrewards.modules.wallet.business.domain.Wallet;
 import java.util.Optional;
 
 public interface WalletGateway {
-    Optional<Wallet> findWalletWithLock(Long id);
+    Optional<Wallet> findWalletById(Long walletId);
+    Optional<Wallet> findWalletWithLock(Long walletId);
     Wallet create(Wallet wallet);
     Wallet update(Wallet wallet);
 }

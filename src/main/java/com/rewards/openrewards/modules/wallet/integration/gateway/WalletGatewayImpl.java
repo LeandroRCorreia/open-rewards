@@ -2,13 +2,11 @@ package com.rewards.openrewards.modules.wallet.integration.gateway;
 
 import com.rewards.openrewards.modules.wallet.business.domain.Wallet;
 import com.rewards.openrewards.modules.wallet.business.gateway.WalletGateway;
-import com.rewards.openrewards.modules.wallet.integration.entity.WalletEntity;
 import com.rewards.openrewards.modules.wallet.integration.mapper.WalletEntityMapper;
 import com.rewards.openrewards.modules.wallet.integration.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 
@@ -20,6 +18,13 @@ public class WalletGatewayImpl implements WalletGateway {
 
     private final WalletEntityMapper walletEntityMapper;
 
+    @Override
+    public Optional<Wallet> findWalletById(Long id){
+        return walletRepository.findById(id)
+                .map(walletEntityMapper::toDomain);
+    }
+
+    @Override
     public Optional<Wallet> findWalletWithLock(Long id){
         return walletRepository.findByIdWithLock(id)
                 .map(walletEntityMapper::toDomain);
