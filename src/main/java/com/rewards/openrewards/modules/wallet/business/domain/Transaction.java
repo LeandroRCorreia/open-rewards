@@ -20,7 +20,7 @@ public class Transaction {
     private TransactionType transactionType;
     private String description;
     private String idempotencyKey;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
 
     public static Transaction createDeposit(Long walletId, BigDecimal amount, String description, String idempotencyKey) {

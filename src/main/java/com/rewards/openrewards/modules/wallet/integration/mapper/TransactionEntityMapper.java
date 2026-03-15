@@ -18,7 +18,7 @@ public class TransactionEntityMapper {
                 .transactionType(TransactionType.valueOf(transactionEntity.getType()))
                 .description(transactionEntity.getDescription())
                 .idempotencyKey(transactionEntity.getIdempotencyKey().toString())
-                .created_at(transactionEntity.getCreatedAt())
+                .createdAt(transactionEntity.getCreatedAt())
                 .build();
     }
 
@@ -30,7 +30,7 @@ public class TransactionEntityMapper {
                 .type(transaction.getTransactionType().name())
                 .description(transaction.getDescription())
                 .idempotencyKey(UUID.fromString(transaction.getIdempotencyKey()))
-                .createdAt(transaction.getCreated_at())
+                .createdAt(transaction.getCreatedAt())
                 .build();
     }
 

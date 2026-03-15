@@ -1,15 +1,22 @@
 package com.rewards.openrewards.modules.wallet.presentation.controller;
 
 
+import com.rewards.openrewards.modules.wallet.business.domain.Transaction;
 import com.rewards.openrewards.modules.wallet.business.domain.Wallet;
+import com.rewards.openrewards.modules.wallet.business.dto.GetTransactionInput;
 import com.rewards.openrewards.modules.wallet.business.usecase.DepositUseCase;
 import com.rewards.openrewards.modules.wallet.business.usecase.GetWalletUseCase;
+import com.rewards.openrewards.modules.wallet.business.usecase.StatementUseCase;
 import com.rewards.openrewards.modules.wallet.business.usecase.WithdrawUseCase;
 import com.rewards.openrewards.modules.wallet.presentation.dto.DepositRequest;
+import com.rewards.openrewards.modules.wallet.presentation.dto.TransactionResponse;
 import com.rewards.openrewards.modules.wallet.presentation.dto.WithdrawRequest;
+import com.rewards.openrewards.modules.wallet.presentation.mapper.TransactionMapper;
 import com.rewards.openrewards.modules.wallet.presentation.mapper.WalletMapper;
 import com.rewards.openrewards.shared.ApiDefaultResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,15 +24,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/v1/wallets")
+@RequestMapping("/api/v1/wallets")
 @RequiredArgsConstructor
 public class WalletController {
 
     private final WalletMapper walletMapper;
+    private final TransactionMapper transactionMapper;
+
     private final DepositUseCase depositUseCase;
     private final WithdrawUseCase withdrawUseCase;
     private final GetWalletUseCase getWalletUseCase;
-
+    private final StatementUseCase statementUseCase;
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiDefaultResponse<Wallet>> getWallet(@PathVariable Long id) {
@@ -33,6 +42,21 @@ public class WalletController {
                 .map(getWalletUseCase::execute)
                 .map(wallet -> ResponseEntity.status(HttpStatus.ACCEPTED).body(ApiDefaultResponse.success(wallet)))
                 .orElseThrow(() -> new RuntimeException("Unexpected error in deposit"));
+    }
+
+    @GetMapping("/{id}/statement")
+    public ResponseEntity<ApiDefaultResponse<Page<TransactionResponse>>> getWalletPageable(
+            @PathVariable Long id,
+            Pageable pageable) {
+        Page<Transaction> transactions = statementUseCase.execute(
+                GetTransactionInput.builder()
+                        .walletId(id)
+                        .pageable(pageable)
+                        .build());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiDefaultResponse.success(transactions.map(transactionMapper::domainToResponse)));
     }
 
     @PostMapping("/deposit")
