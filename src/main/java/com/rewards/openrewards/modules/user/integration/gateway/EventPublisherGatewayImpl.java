@@ -12,15 +12,16 @@ import org.springframework.stereotype.Component;
 public class EventPublisherGatewayImpl implements EventPublisherGateway {
 
     private final RabbitTemplate rabbitTemplate;
-    private static final String EXCHANGE_WALLET = "user.events.exchange";
-    private static final String ROUTING_KEY_WALLET = "user.created";
+
+    private static final String EXCHANGE_USER = "user.events.exchange";
+    private static final String ROUTING_KEY_USER_CREATED = "user.created";
 
     @Override
     public void publish(UserCreatedEvent event) {
         rabbitTemplate.convertAndSend(
-                EXCHANGE_WALLET,
-                ROUTING_KEY_WALLET,
-                new UserCreatedEvent(event.id())
+                EXCHANGE_USER,
+                ROUTING_KEY_USER_CREATED,
+                event
         );
     }
 

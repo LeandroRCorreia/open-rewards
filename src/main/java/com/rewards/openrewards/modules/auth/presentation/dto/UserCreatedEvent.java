@@ -1,5 +1,4 @@
-package com.rewards.openrewards.modules.user.business.event;
-
+package com.rewards.openrewards.modules.auth.presentation.dto;
 
 import lombok.Builder;
 

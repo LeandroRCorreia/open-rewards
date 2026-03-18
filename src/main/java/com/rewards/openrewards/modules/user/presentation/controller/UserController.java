@@ -16,7 +16,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/v1/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -29,7 +29,7 @@ public class UserController {
             UriComponentsBuilder uriBuilder
     ) {
         return Optional.of(request)
-                .map(userMapper::requestCreateUserToUser)
+                .map(userMapper::requestCreateUserToUserInput)
                 .map(createUserUseCase::execute)
                 .map(userMapper::UserToResponseUser)
                 .map(user -> {

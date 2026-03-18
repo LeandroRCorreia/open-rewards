@@ -36,7 +36,7 @@ public class WalletController {
     private final GetWalletUseCase getWalletUseCase;
     private final StatementUseCase statementUseCase;
 
-    @GetMapping("/{id}")
+    @GetMapping("/{userId}")
     public ResponseEntity<ApiDefaultResponse<Wallet>> getWallet(@PathVariable Long id) {
         return Optional.of(id)
                 .map(getWalletUseCase::execute)
@@ -44,7 +44,7 @@ public class WalletController {
                 .orElseThrow(() -> new RuntimeException("Unexpected error in deposit"));
     }
 
-    @GetMapping("/{id}/statement")
+    @GetMapping("/{userId}/statement")
     public ResponseEntity<ApiDefaultResponse<Page<TransactionResponse>>> getWalletPageable(
             @PathVariable Long id,
             Pageable pageable) {

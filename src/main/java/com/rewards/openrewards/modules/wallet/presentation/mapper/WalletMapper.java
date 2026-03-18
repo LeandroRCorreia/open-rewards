@@ -14,7 +14,7 @@ public class WalletMapper {
 
     public Wallet UserCreatedEventToDomain(UserCreatedEvent userCreatedEvent){
         return Wallet.builder()
-                .userId(userCreatedEvent.id())
+                .userId(userCreatedEvent.userId())
                 .build();
     }
 
