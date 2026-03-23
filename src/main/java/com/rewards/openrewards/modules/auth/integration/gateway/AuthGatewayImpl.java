@@ -5,6 +5,8 @@ import com.rewards.openrewards.modules.auth.business.gateway.AuthGateway;
 import com.rewards.openrewards.modules.auth.integration.mapper.AuthGatewayEntityMapper;
 import com.rewards.openrewards.modules.auth.integration.repository.AuthCredentialsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -24,5 +26,12 @@ public class AuthGatewayImpl implements AuthGateway {
                 .map(authCredentialsRepository::save)
                 .map(authGatewayEntityMapper::toDomain)
                 .orElseThrow(() -> new RuntimeException("Error to create AuthGateway User"));
+    }
+
+    @Override
+    public UserDetails findByEmail(String email) {
+        return authCredentialsRepository.findByEmail(email)
+                .map(authGatewayEntityMapper::toDomain)
+                .orElseThrow(() -> new RuntimeException("Error to find UserDetails" + email));
     }
 }
