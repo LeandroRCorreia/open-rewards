@@ -36,6 +36,12 @@ public class AuthCredentialsEntity {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "roles")
+    private String roles;
+
+    @Column(name = "wallet_id")
+    private Long walletId;
+
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;

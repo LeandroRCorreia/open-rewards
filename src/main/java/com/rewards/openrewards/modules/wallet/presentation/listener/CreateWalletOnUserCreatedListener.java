@@ -22,7 +22,7 @@ public class CreateWalletOnUserCreatedListener {
             key = "user.created"
     ))
     public void handle(UserCreatedEvent event) {
-        createWalletUseCase.execute(walletMapper.UserCreatedEventToDomain(event));
+        createWalletUseCase.execute(walletMapper.UserCreatedEventToWalletCreatedInput(event));
         //TODO: ACK
     }
 

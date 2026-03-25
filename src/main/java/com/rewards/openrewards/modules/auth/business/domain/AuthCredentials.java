@@ -16,30 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class AuthCredentials implements UserDetails {
+public class AuthCredentials {
     private Long id;
     private Long userId;
+    private Long walletId;
     private String email;
     private String passwordHash;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private UserRoles roles;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.roles == UserRoles.ADMIN) {
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        }
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-    }
-
-    @Override
-    public @Nullable String getPassword() {
-        return passwordHash;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
 }

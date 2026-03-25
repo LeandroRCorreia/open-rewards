@@ -12,16 +12,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CreateAuthCredentialsOnUserCreatedListener {
+public class CreateAuthCredentialsOnWalletCreatedListener {
 
 
     private final AuthMapper authMapper;
     private final CreateAuthCredentialsUseCase createAuthCredentialsUseCase;
 
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = "auth_credentials.user.created.queue", durable = "true"),
-            exchange = @Exchange(value = "user.events.exchange", type = "topic", ignoreDeclarationExceptions = "true"),
-            key = "user.created"
+            value = @Queue(value = "auth_credentials.wallet.created.queue", durable = "true"),
+            exchange = @Exchange(value = "wallet.events.exchange", type = "topic", ignoreDeclarationExceptions = "true"),
+            key = "wallet.created"
     ))
     public void handle(UserCreatedEvent event) {
         createAuthCredentialsUseCase.execute(authMapper.userCreatedEventToAuthCredentials(event));
