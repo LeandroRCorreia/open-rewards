@@ -36,21 +36,21 @@ public class WalletController {
     private final GetWalletUseCase getWalletUseCase;
     private final StatementUseCase statementUseCase;
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<ApiDefaultResponse<Wallet>> getWallet(@PathVariable Long id) {
-        return Optional.of(id)
+    @GetMapping("/{walletId}")
+    public ResponseEntity<ApiDefaultResponse<Wallet>> getWallet(@PathVariable("walletId") Long walletId) {
+        return Optional.of(walletId)
                 .map(getWalletUseCase::execute)
                 .map(wallet -> ResponseEntity.status(HttpStatus.ACCEPTED).body(ApiDefaultResponse.success(wallet)))
                 .orElseThrow(() -> new RuntimeException("Unexpected error in deposit"));
     }
 
-    @GetMapping("/{userId}/statement")
+    @GetMapping("/{walletId}/statement")
     public ResponseEntity<ApiDefaultResponse<Page<TransactionResponse>>> getWalletPageable(
-            @PathVariable Long id,
+            @PathVariable("walletId") Long walletId,
             Pageable pageable) {
         Page<Transaction> transactions = statementUseCase.execute(
                 GetTransactionInput.builder()
-                        .walletId(id)
+                        .walletId(walletId)
                         .pageable(pageable)
                         .build());
 
@@ -76,6 +76,5 @@ public class WalletController {
                 .map(wallet -> ResponseEntity.status(HttpStatus.CREATED).body(ApiDefaultResponse.created(wallet)))
                 .orElseThrow(() -> new RuntimeException("Unexpected error in withdraw"));
     }
-
 
 }
