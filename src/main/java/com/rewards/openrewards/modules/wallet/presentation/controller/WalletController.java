@@ -14,6 +14,7 @@ import com.rewards.openrewards.modules.wallet.presentation.dto.WithdrawRequest;
 import com.rewards.openrewards.modules.wallet.presentation.mapper.TransactionMapper;
 import com.rewards.openrewards.modules.wallet.presentation.mapper.WalletMapper;
 import com.rewards.openrewards.shared.ApiDefaultResponse;
+import com.rewards.openrewards.shared.security.SpringSecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,24 +37,24 @@ public class WalletController {
     private final GetWalletUseCase getWalletUseCase;
     private final StatementUseCase statementUseCase;
 
-    @GetMapping("/{walletId}")
-    public ResponseEntity<ApiDefaultResponse<Wallet>> getWallet(@PathVariable("walletId") Long walletId) {
-        return Optional.of(walletId)
+    private final SpringSecurityContext springSecurityContext;
+
+    @GetMapping
+    public ResponseEntity<ApiDefaultResponse<Wallet>> getWallet() {
+            return Optional.of(springSecurityContext.getCurrentWalletId())
                 .map(getWalletUseCase::execute)
                 .map(wallet -> ResponseEntity.status(HttpStatus.ACCEPTED).body(ApiDefaultResponse.success(wallet)))
                 .orElseThrow(() -> new RuntimeException("Unexpected error in deposit"));
     }
 
-    @GetMapping("/{walletId}/statement")
+    @GetMapping("/statement")
     public ResponseEntity<ApiDefaultResponse<Page<TransactionResponse>>> getWalletPageable(
-            @PathVariable("walletId") Long walletId,
             Pageable pageable) {
         Page<Transaction> transactions = statementUseCase.execute(
                 GetTransactionInput.builder()
-                        .walletId(walletId)
+                        .walletId(springSecurityContext.getCurrentWalletId())
                         .pageable(pageable)
                         .build());
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApiDefaultResponse.success(transactions.map(transactionMapper::domainToResponse)));
@@ -61,7 +62,8 @@ public class WalletController {
 
     @PostMapping("/deposit")
     public ResponseEntity<ApiDefaultResponse<Wallet>> deposit(@RequestBody DepositRequest depositRequest) {
-        return Optional.of(depositRequest)
+        return Optional.of(springSecurityContext.getCurrentWalletId())
+                .map(depositRequest::withWalletId)
                 .map(walletMapper::AddBalanceToDomain)
                 .map(depositUseCase::execute)
                 .map(wallet -> ResponseEntity.status(HttpStatus.CREATED).body(ApiDefaultResponse.created(wallet)))
@@ -70,7 +72,8 @@ public class WalletController {
 
     @PostMapping("/withdraw")
     public ResponseEntity<ApiDefaultResponse<Wallet>> withDraw(@RequestBody WithdrawRequest withdrawRequest) {
-        return Optional.of(withdrawRequest)
+        return Optional.of(springSecurityContext.getCurrentWalletId())
+                .map(withdrawRequest::withWalletId)
                 .map(walletMapper::withdrawRequestToWithdrawInput)
                 .map(withdrawUseCase::execute)
                 .map(wallet -> ResponseEntity.status(HttpStatus.CREATED).body(ApiDefaultResponse.created(wallet)))
